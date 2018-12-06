@@ -1,27 +1,20 @@
-// Properties in the target object will be overwritten by properties
-// in the sources if they have the same key
-// Later sources' properties will similarly overwrite earlier ones
+/**
+ * Object.prototype.myAssign - the assign function is used to copy values of
+ * all of the enumerable properties from one or more source objects to a target
+ * object.
+ */
 Object.prototype.myAssign = function(target, ...sources) {
-
   if (target === 'undefined' || target === null) {
     throw new TypeError('target must be an object')
   }
-
   let to, nextSource, from, desc, propValue, isEnumerable
-
   to = Object(target)
 
-  // Let sources be the List of argument values starting with the second argument.
-  // For each element nextSource of sources, in ascending index order,
   for (let i = 1; i < arguments.length; i++) {
     nextSource = arguments[i]
-    // If nextSource is neither undefined nor null, then
     if (nextSource !== undefined || nextSource !== null) {
-      // Let from be ToObject(nextSource).
       from = Object(nextSource)
-      // Let keys be from.[[OwnPropertyKeys]]().
       keys = Object.keys(from)
-
       for (let j = 0; j < keys.length; j++) {
         nextKey = keys[j]
         desc = Object.getOwnPropertyDescriptor(from, nextKey)
@@ -31,7 +24,6 @@ Object.prototype.myAssign = function(target, ...sources) {
       }
     }
   }
-  // Return to
   return to
 }
 
@@ -41,6 +33,26 @@ let obj = {
 	3: "three"
 }
 
-let free = Object.myAssign({}, obj)
-console.log("free")
-console.log(free)
+let tro = {
+	4: "four",
+	5: "five",
+	6: "six"
+}
+
+let overlap = {
+	1: "hey",
+	3: "there",
+	5: "way"
+}
+
+let oneObj = Object.myAssign({}, obj)
+console.log("oneObj")
+console.log(oneObj)
+
+let twoObj = Object.myAssign({}, obj, tro)
+console.log("twoObj")
+console.log(twoObj)
+
+let overlapObj = Object.myAssign({}, obj, tro, overlap)
+console.log("overlapObj")
+console.log(overlapObj)
